@@ -464,10 +464,10 @@ namespace System.Windows.Controls
                 // (If one resists, don't hide)
                 if ((bool)e.NewValue == false)
                 {
-                    if (!ParentTreeView.DeselectRecursive(this, true))
-                    {
-                        IsVisible = true;
-                    }
+                    //if (!ParentTreeView.DeselectRecursive(this, true))
+                    //{
+                    //    IsVisible = true;
+                    //}
                 }
             }
 
