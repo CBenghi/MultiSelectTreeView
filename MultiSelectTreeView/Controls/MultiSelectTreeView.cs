@@ -71,7 +71,7 @@ namespace System.Windows.Controls
 			new FrameworkPropertyMetadata(13, null));
 
 		public static DependencyProperty IsKeyboardModeProperty = DependencyProperty.Register(
-			"IsKeyboardMode",
+			nameof(IsKeyboardMode),
 			typeof(bool),
 			typeof(MultiSelectTreeView),
 			new FrameworkPropertyMetadata(false, null));
@@ -98,6 +98,12 @@ namespace System.Windows.Controls
 		public static readonly DependencyProperty SelectionModeProperty = DependencyProperty.Register(
 			"SelectionMode", typeof(TreeViewSelectionMode), typeof(MultiSelectTreeView), 
 			new FrameworkPropertyMetadata(default(TreeViewSelectionMode), FrameworkPropertyMetadataOptions.None, OnSelectionModeChanged));
+
+		public static DependencyProperty RightClickSelectionProperty = DependencyProperty.Register(
+			nameof(RightClickSelection),
+			typeof(bool),
+			typeof(MultiSelectTreeView),
+			new FrameworkPropertyMetadata(false, null));
 
 		#endregion
 
@@ -189,6 +195,18 @@ namespace System.Windows.Controls
 			set
 			{
 				SetValue(IsKeyboardModeProperty, value);
+			}
+		}
+		
+		public bool RightClickSelection
+		{
+			get
+			{
+				return (bool) GetValue(RightClickSelectionProperty);
+			}
+			set
+			{
+				SetValue(RightClickSelectionProperty, value);
 			}
 		}
 

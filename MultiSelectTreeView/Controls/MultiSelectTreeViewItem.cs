@@ -686,7 +686,7 @@ namespace System.Windows.Controls
                 ParentTreeView.Selection.Select(this);
                 e.Handled = true;
             }
-            if (e.ChangedButton == MouseButton.Right)
+            if (ParentTreeView.RightClickSelection && e.ChangedButton == MouseButton.Right)
             {
                 if (!IsSelected)
                 {

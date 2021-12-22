@@ -165,89 +165,92 @@ namespace System.Windows.Controls
 				double bottom = top + height - 1;
 
 				// Debug.WriteLine(string.Format("left:{1};right:{2};top:{3};bottom:{4}", null, left, right, top, bottom));
-				SelectionMultiple selection = (SelectionMultiple) treeView.Selection;
-				bool foundFocusItem = false;
-				foreach (var item in items)
+
+				if (treeView.Selection is SelectionMultiple selection)
 				{
-					FrameworkElement itemContent = (FrameworkElement) item.Template.FindName("PART_Header", item);
-					if (itemContent == null) 
+					bool foundFocusItem = false;
+					foreach (var item in items)
 					{
-						continue;
-					}
-
-					Point p = ((FrameworkElement)itemContent.Parent).TransformToAncestor(content).Transform(new Point());
-					double itemLeft = p.X;
-					double itemRight = p.X + itemContent.ActualWidth - 1;
-					double itemTop = p.Y;
-					double itemBottom = p.Y + itemContent.ActualHeight - 1;
-
-					// Debug.WriteLine(string.Format("element:{0};itemleft:{1};itemright:{2};itemtop:{3};itembottom:{4}",item.DataContext,itemLeft,itemRight,itemTop,itemBottom));
-
-					// Compute the current input states for determining the new selection state of the item
-					bool intersect = !(itemLeft > right || itemRight < left || itemTop > bottom || itemBottom < top);
-					bool initialSelected = initialSelection != null && initialSelection.Contains(item.DataContext);
-					bool ctrl = SelectionMultiple.IsControlKeyDown;
-
-					// Decision matrix:
-					// If the Ctrl key is pressed, each intersected item will be toggled from its initial selection.
-					// Without the Ctrl key, each intersected item is selected, others are deselected.
-					//
-					// newSelected
-					// ─────────┬───────────────────────
-					//          │ intersect
-					//          │  0        │  1
-					//          ├───────────┴───────────
-					//          │ initial
-					//          │  0  │  1  │  0  │  1
-					// ─────────┼─────┼─────┼─────┼─────
-					// ctrl  0  │  0  │  0  │  1  │  1   = intersect
-					// ─────────┼─────┼─────┼─────┼─────
-					//       1  │  0  │  1  │  1  │  0   = intersect XOR initial
-					//
-					bool newSelected = intersect ^ (initialSelected && ctrl);
-
-					// The new selection state for this item has been determined. Apply it.
-					if (newSelected)
-					{
-						// The item shall be selected
-						if (!treeView.SelectedItems.Contains(item.DataContext))
+						FrameworkElement itemContent = (FrameworkElement)item.Template.FindName("PART_Header", item);
+						if (itemContent == null)
 						{
-							// The item is not currently selected. Try to select it.
-							if (!selection.SelectByRectangle(item))
+							continue;
+						}
+
+						Point p = ((FrameworkElement)itemContent.Parent).TransformToAncestor(content).Transform(new Point());
+						double itemLeft = p.X;
+						double itemRight = p.X + itemContent.ActualWidth - 1;
+						double itemTop = p.Y;
+						double itemBottom = p.Y + itemContent.ActualHeight - 1;
+
+						// Debug.WriteLine(string.Format("element:{0};itemleft:{1};itemright:{2};itemtop:{3};itembottom:{4}",item.DataContext,itemLeft,itemRight,itemTop,itemBottom));
+
+						// Compute the current input states for determining the new selection state of the item
+						bool intersect = !(itemLeft > right || itemRight < left || itemTop > bottom || itemBottom < top);
+						bool initialSelected = initialSelection != null && initialSelection.Contains(item.DataContext);
+						bool ctrl = SelectionMultiple.IsControlKeyDown;
+
+						// Decision matrix:
+						// If the Ctrl key is pressed, each intersected item will be toggled from its initial selection.
+						// Without the Ctrl key, each intersected item is selected, others are deselected.
+						//
+						// newSelected
+						// ─────────┬───────────────────────
+						//          │ intersect
+						//          │  0        │  1
+						//          ├───────────┴───────────
+						//          │ initial
+						//          │  0  │  1  │  0  │  1
+						// ─────────┼─────┼─────┼─────┼─────
+						// ctrl  0  │  0  │  0  │  1  │  1   = intersect
+						// ─────────┼─────┼─────┼─────┼─────
+						//       1  │  0  │  1  │  1  │  0   = intersect XOR initial
+						//
+						bool newSelected = intersect ^ (initialSelected && ctrl);
+
+						// The new selection state for this item has been determined. Apply it.
+						if (newSelected)
+						{
+							// The item shall be selected
+							if (!treeView.SelectedItems.Contains(item.DataContext))
 							{
-								if (selection.LastCancelAll)
+								// The item is not currently selected. Try to select it.
+								if (!selection.SelectByRectangle(item))
 								{
-									EndAction();
-									return;
+									if (selection.LastCancelAll)
+									{
+										EndAction();
+										return;
+									}
 								}
 							}
 						}
-					}
-					else
-					{
-						// The item shall be deselected
-						if (treeView.SelectedItems.Contains(item.DataContext))
+						else
 						{
-							// The item is currently selected. Try to deselect it.
-							if (!selection.DeselectByRectangle(item))
+							// The item shall be deselected
+							if (treeView.SelectedItems.Contains(item.DataContext))
 							{
-								if (selection.LastCancelAll)
+								// The item is currently selected. Try to deselect it.
+								if (!selection.DeselectByRectangle(item))
 								{
-									EndAction();
-									return;
+									if (selection.LastCancelAll)
+									{
+										EndAction();
+										return;
+									}
 								}
 							}
 						}
-					}
 
-					// Always focus and bring into view the item under the mouse cursor
-					if (!foundFocusItem &&
-						currentPoint.X >= itemLeft && currentPoint.X <= itemRight &&
-						currentPoint.Y >= itemTop && currentPoint.Y <= itemBottom)
-					{
-						FocusHelper.Focus(item, true);
-						scrollViewer.UpdateLayout();
-						foundFocusItem = true;
+						// Always focus and bring into view the item under the mouse cursor
+						if (!foundFocusItem &&
+							currentPoint.X >= itemLeft && currentPoint.X <= itemRight &&
+							currentPoint.Y >= itemTop && currentPoint.Y <= itemBottom)
+						{
+							FocusHelper.Focus(item, true);
+							scrollViewer.UpdateLayout();
+							foundFocusItem = true;
+						}
 					}
 				}
 

@@ -93,6 +93,7 @@
 				ItemsSource="{Binding EntireSet}"
                 SelectedItems="{Binding TheSelectedFew}"
 				PreviewSelectionChanged="TheTreeView_PreviewSelectionChanged"
+                RightClickSelection="False"
                 >
 				
 				<Controls:MultiSelectTreeView.ContextMenu>
