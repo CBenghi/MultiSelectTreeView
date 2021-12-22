@@ -414,7 +414,7 @@ namespace System.Windows.Controls
                         item.ParentTreeView.SelectedItems.Add(item.DataContext);
                     }
                     item.BringIntoView();
-                    item.Focus();
+                    //item.Focus();
                 }
                 else
                 {
@@ -445,15 +445,16 @@ namespace System.Windows.Controls
                     {
                         ((FrameworkElement)GetVisualChild(VisualChildrenCount - 1)).BringIntoView();
                     }
+                    this.BringIntoView(); // don't exceed going to the last
                 }
                 // Deselect children of collapsed item
                 // (If one resists, don't collapse)
                 if ((bool)e.NewValue == false)
                 {
-                    if (!ParentTreeView.DeselectRecursive(this, false))
-                    {
-                        IsExpanded = true;
-                    }
+                    //if (!ParentTreeView.DeselectRecursive(this, false))
+                    //{
+                    //    IsExpanded = true;
+                    //}
                 }
             }
 

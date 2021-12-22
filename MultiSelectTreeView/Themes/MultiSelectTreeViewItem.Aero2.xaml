@@ -257,8 +257,9 @@
 									Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsSelected}"
 									Value="True"/>
 							</MultiDataTrigger.Conditions>
-							<Setter Property="Control.Background" Value="#d9d9d9"/><!-- Windows 8: #f7f7f7 -->
-							<Setter Property="Border.BorderBrush" Value="#d9d9d9"/><!-- Windows 8: #dedede -->
+                            <!-- mod focused -->
+                            <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/><!-- Windows 8: #f7f7f7 -->
+                            <Setter Property="Border.BorderBrush" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey }}"/><!-- Windows 8: #dedede -->
 						</MultiDataTrigger>
 						
 						<!-- Make all selected items grey when none of this TreeView's items is focused (i.e. the TreeView is not focused) -->
@@ -274,8 +275,9 @@
 									Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=IsSelected}"
 									Value="True"/>
 							</MultiDataTrigger.Conditions>
-							<Setter Property="Control.Background" Value="#d9d9d9"/><!-- Windows 8: #f7f7f7 -->
-							<Setter Property="Border.BorderBrush" Value="#d9d9d9"/><!-- Windows 8: #dedede -->
+                            <!-- mod not focused -->
+                            <Setter Property="Control.Background" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey }}"/><!-- Windows 8: #f7f7f7 -->
+                            <Setter Property="Border.BorderBrush" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey }}"/><!-- Windows 8: #dedede -->
 						</MultiDataTrigger>
 
 						<!-- Set the border and background when the mouse is located over the item and HoverHighlighting is active -->
